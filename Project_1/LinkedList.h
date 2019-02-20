@@ -76,6 +76,3 @@ public:
 		return os;
 	};
 };
-//
-//template <class  T>
-//std::ostream& operator<<(std::ostream& os, const LinkedList<T>& linked_list)
