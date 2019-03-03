@@ -23,7 +23,7 @@ namespace UnitTest_For_Project_2
 			Assert::IsTrue(list.get_size() == 0);
 		}
 
-		TEST_METHOD(get_size_true_2)
+		TEST_METHOD(get_size_true_Int)
 		{
 			LinkedList<int> list;
 			list.push_back(1);
@@ -33,9 +33,30 @@ namespace UnitTest_For_Project_2
 			Assert::IsTrue(list.get_size() == 4);
 		}
 
-		TEST_METHOD(at)
+		TEST_METHOD(get_size_true_char)
+		{
+			LinkedList<char> list;
+			list.push_back('a');
+			list.push_back('b');
+			list.push_back('c');
+			list.push_back('d');
+			Assert::IsTrue(list.get_size() == 4);
+		}
+
+		TEST_METHOD(at_int)
 		{
 			LinkedList<int> list;
+			list.push_back(1);
+			list.push_back(2);
+			list.push_back(3);
+			list.push_back(4);
+
+			Assert::IsTrue(list.at(0) == 1 && list.at(1) == 2 && list.at(2) == 3 && list.at(3) == 4);
+		}
+
+		TEST_METHOD(at_long)
+		{
+			LinkedList<long> list;
 			list.push_back(1);
 			list.push_back(2);
 			list.push_back(3);
@@ -92,12 +113,20 @@ namespace UnitTest_For_Project_2
 			Assert::IsTrue(list.at(0) == 1); // 1 2 3 4
 		}
 
-		TEST_METHOD(push_front_is_valid_2)
+		TEST_METHOD(push_front_is_valid_int)
 		{
 			LinkedList<int> list;
 			list.push_front(1);
 
 			Assert::IsTrue(list.at(0) == 1 && list.get_size() == 1);
+		}
+
+		TEST_METHOD(push_front_is_valid_string)
+		{
+			LinkedList<std::string> list;
+			list.push_front("1");
+
+			Assert::IsTrue(list.at(0) == "1" && list.get_size() == 1);
 		}
 
 		TEST_METHOD(equals_true)
@@ -362,7 +391,19 @@ namespace UnitTest_For_Project_2
 			Assert::IsFalse(list.get_size() == 3);
 		}
 
-		TEST_METHOD(clear_1)
+		TEST_METHOD(clear_int)
+		{
+			LinkedList<int> list;
+			list.push_back(1);
+			list.push_back(2);
+			list.push_back(3);
+			list.push_back(4);
+
+			list.clear();
+			Assert::IsTrue(list.isEmpty());
+		}
+
+		TEST_METHOD(clear_double)
 		{
 			LinkedList<int> list;
 			list.push_back(1);

@@ -1,6 +1,6 @@
 #pragma once
 template <class T>
-class LIterator
+class Iterator
 {
 public:
 	virtual T next() = 0; // index of data and data

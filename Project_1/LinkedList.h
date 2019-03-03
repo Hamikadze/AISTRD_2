@@ -9,29 +9,25 @@ public:
 	class Node
 	{
 	public:
-		Node(T data, Node * next = nullptr/*, Node * prev = nullptr*/) {
+		Node(T data, Node * next = nullptr) {
 			this->data = data;
 			this->next = next;
-			//this->prev = prev;
 		};
 		~Node()
 		{
 			next = nullptr;
 			delete next;
-			//prev = nullptr;
-			//delete prev;
 			data = {};
 		};
 		T data;
 		Node* next;
-		//Node* prev;
 	};
 	void add_first(T newElem);
 	void reset_list();
 	Node * head{};
 	Node * tail{};
 	size_t size;
-	class ListIterator : public LIterator<T>
+	class ListIterator : public Iterator<T>
 	{
 	public:
 		ListIterator(Node* head)
@@ -63,7 +59,7 @@ public:
 	bool contains(T data) const;
 	bool equals(LinkedList* list) const;
 
-	LIterator<T>* create_list_iterator() const;
+	Iterator<T>* create_list_iterator() const;
 	friend std::ostream& operator<<(std::ostream& os, const LinkedList<T>& linked_list) {
 		if (linked_list.size == 0)
 			return os << "[nullptr]";

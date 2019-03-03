@@ -165,7 +165,7 @@ bool LinkedList<T>::equals(LinkedList * list) const
 }
 
 template <class T>
-LIterator<T>* LinkedList<T>::create_list_iterator() const
+Iterator<T>* LinkedList<T>::create_list_iterator() const
 {
 	if (this == nullptr && this->head == nullptr) throw std::exception("Does not exist");
 	return new ListIterator(this->head);
