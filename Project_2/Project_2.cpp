@@ -3,33 +3,41 @@
 
 #include "pch.h"
 #include<ctime>
-#include "RedBlackTree.h"
+#include "RedBlackTree.cpp"
 
 using namespace std;
 
 void test_int() {
-	Tree<int, int> Dictionary;
+	Dictionary<int, int> dictionary;
 
-	Dictionary.Insert(7, 3);
-	Dictionary.Insert(2, 8);
-	Dictionary.Insert(1, 9);
-	Dictionary.Insert(3, 7);
-	Dictionary.Insert(4, 6);
-	Dictionary.Insert(9, 1);
-	Dictionary.Insert(8, 2);
+	dictionary.Insert(7, 3);
+	dictionary.Insert(2, 8);
+	dictionary.Insert(1, 9);
+	dictionary.Insert(3, 7);
+	dictionary.Insert(4, 6);
+	dictionary.Insert(9, 1);
+	dictionary.Insert(8, 2);
 
-	if (Dictionary.Contains(9))
+	if (dictionary.Contains(9))
 		cout << " test 1" << endl;
-	Dictionary.Remove(9);
-	if (!Dictionary.Contains(9))
+	dictionary.Remove(9);
+	if (!dictionary.Contains(9))
 		cout << " test 2" << endl;
-	if (Dictionary.Find(9) == 1)
+	if (dictionary.Find(9) == 1)
 		cout << " test e" << endl;
-	if (Dictionary.Find(8) == 2)
+	if (dictionary.Find(8) == 2)
 		cout << " test 3" << endl;
 	cout << endl;
-	auto list_keys = Dictionary.Keys().create_list_iterator();
-	auto list_values = Dictionary.Values().create_list_iterator();
+	auto list_keys = dictionary.Keys().create_list_iterator();
+	auto list_values = dictionary.Values().create_list_iterator();
+	while (list_keys->has_next() && list_values->has_next())
+	{
+		cout << list_keys->next() << " " << list_values->next() << endl;
+	}
+
+	dictionary.Insert(4, 555);
+	list_keys = dictionary.Keys().create_list_iterator();
+	list_values = dictionary.Values().create_list_iterator();
 	while (list_keys->has_next() && list_values->has_next())
 	{
 		cout << list_keys->next() << " " << list_values->next() << endl;
@@ -38,6 +46,7 @@ void test_int() {
 
 int main() {
 	test_int();
+	system("pause");
 	return 0;
 }
 
