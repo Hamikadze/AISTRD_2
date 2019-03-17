@@ -60,6 +60,7 @@ public:
 	bool equals(LinkedList* list) const;
 
 	Iterator<T>* create_list_iterator() const;
+
 	friend std::ostream& operator<<(std::ostream& os, const LinkedList<T>& linked_list) {
 		if (linked_list.size == 0)
 			return os << "[nullptr]";

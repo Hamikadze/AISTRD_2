@@ -3,9 +3,7 @@
 
 template <class T1, class T2>
 void Dictionary<T1, T2>::Insert(T1 key, T2 value) {
-	node<T1, T2> *create = new node<T1, T2>(key, value);
-	node<T1, T2> *p = root;
-	node<T1, T2> *q = nullptr;
+	auto* create = new node<T1, T2>(key, value);
 	if (root == nullptr)
 	{
 		root = create;
@@ -13,160 +11,161 @@ void Dictionary<T1, T2>::Insert(T1 key, T2 value) {
 	}
 	else
 	{
-		while (p != nullptr)
+		node<T1, T2>* father = nullptr;
+		node<T1, T2>* temp = root;
+		while (temp != nullptr)
 		{
-			q = p;
-			if (p->key > create->key) p = p->left;
-			else if (p->key < create->key) p = p->right;
+			father = temp;
+			if (temp->key > create->key) temp = temp->left;
+			else if (temp->key < create->key) temp = temp->right;
 			else {
-				p->value = value;
+				temp->value = value;
 				return;
 			};
 		}
-		create->father = q;
-		if (q->key < create->key) q->right = create;
-		else if (q->key > create->key)q->left = create;
+		create->father = father;
+		if (father->key < create->key) father->right = create;
+		else if (father->key > create->key)father->left = create;
 		else return;
 	}
 	insert_fix(create);
 }
 
 template<class T1, class T2>
-void Dictionary<T1, T2>::insert_fix(node<T1, T2> *p)
+void Dictionary<T1, T2>::insert_fix(node<T1, T2>* input)
 {
-	node<T1, T2> *x = p;
-	while (x != root && x->father->color)
+	node<T1, T2>* temp = input;
+	while (temp != root && temp->father->color)
 	{
-		if (x->father == x->father->father->left)
+		if (temp->father == temp->father->father->left)
 		{
-			node<T1, T2> *y = x->father->father->right;
+			node<T1, T2>* y = temp->father->father->right;
 			if ((y != nullptr) && (y->color))
 			{
-				x->father->color = 0;
+				temp->father->color = 0;
 				y->color = 0;
-				x->father->father->color;
-				x = x->father->father;
+				temp = temp->father->father;
 			}
 			else
 			{
-				if (x->father->right == x)
+				if (temp->father->right == temp)
 				{
-					x = x->father;
-					rotate_left(x);
+					temp = temp->father;
+					rotate_left(temp);
 				}
-				x->father->color = 0;
-				x->father->father->color = 1;
-				rotate_right(x->father->father);
+				temp->father->color = 0;
+				temp->father->father->color = 1;
+				rotate_right(temp->father->father);
 			}
 		}
 		else
 		{
-			node<T1, T2> *y = x->father->father->left;
+			node<T1, T2>* y = temp->father->father->left;
 			if ((y != nullptr) && (y->color))
 			{
-				x->father->color = 0;
+				temp->father->color = 0;
 				y->color = 0;
-				x->father->father->color = 1;
-				x = x->father->father;
+				temp->father->father->color = 1;
+				temp = temp->father->father;
 			}
 			else
 			{
-				if (x->father->left == x)
+				if (temp->father->left == temp)
 				{
-					x = x->father;
-					rotate_right(x);
+					temp = temp->father;
+					rotate_right(temp);
 				}
-				x->father->color = 0;
-				x->father->father->color = 1;
-				rotate_left(x->father->father);
+				temp->father->color = 0;
+				temp->father->father->color = 1;
+				rotate_left(temp->father->father);
 			}
 		}
 	}
-	root->color = 0;
+	root->color = false;
 }
 
 template<class T1, class T2>
-void Dictionary<T1, T2>::rotate_right(node<T1, T2>* y)
+void Dictionary<T1, T2>::rotate_right(node<T1, T2>* input)
 {
-	if (y->left == nullptr)
+	if (input->left == nullptr)
 		return;
-	node<T1, T2> *x = y->left;
-	node<T1, T2> *b = x->right;
-	node<T1, T2> *f = y->father;
-	if (f == nullptr)
+	node<T1, T2> * left = input->left;
+	node<T1, T2> * right = left->right;
+	node<T1, T2> * father = input->father;
+	if (father == nullptr)
 	{
-		x->father = nullptr;
-		root = x;
+		left->father = nullptr;
+		root = left;
 	}
 	else
 	{
-		x->father = f;
-		if (f->left == y)
-			f->left = x;
-		if (f->right == y)
-			f->right = x;
+		left->father = father;
+		if (father->left == input)
+			father->left = left;
+		if (father->right == input)
+			father->right = left;
 	}
-	x->right = y;
-	y->father = x;
-	y->left = b;
-	if (b != nullptr)
-		b->father = y;
+	left->right = input;
+	input->father = left;
+	input->left = right;
+	if (right != nullptr)
+		right->father = input;
 }
 
 template <class T1, class T2>
-void Dictionary<T1, T2>::rotate_left(node<T1, T2>* x)
+void Dictionary<T1, T2>::rotate_left(node<T1, T2> * input)
 {
-	if (x->right == nullptr)
+	if (input->right == nullptr)
 		return;
-	node<T1, T2> *y = x->right;
-	node<T1, T2> *b = y->left;
-	node<T1, T2> *f = x->father;
-	if (f == nullptr)
+	node<T1, T2> * right = input->right;
+	node<T1, T2> * left = right->left;
+	node<T1, T2> * father = input->father;
+	if (father == nullptr)
 	{
-		y->father = nullptr;
-		root = y;
+		right->father = nullptr;
+		root = right;
 	}
 	else
 	{
-		y->father = f;
-		if (f->left == x)
-			f->left = y;
-		if (f->right == x)
-			f->right = y;
+		right->father = father;
+		if (father->left == input)
+			father->left = right;
+		if (father->right == input)
+			father->right = right;
 	}
-	y->left = x;
-	x->father = y;
-	x->right = b;
-	if (b != nullptr)
-		b->father = x;
+	right->left = input;
+	input->father = right;
+	input->right = left;
+	if (left != nullptr)
+		left->father = input;
 }
 template<class T1, class T2>
-node<T1, T2>* Dictionary<T1, T2>::node_find(T1 key)
+node<T1, T2> * Dictionary<T1, T2>::node_find(T1 key)
 {
-	node<T1, T2> *t = root;
-	while (t != nullptr)
+	node<T1, T2>* temp = root;
+	while (temp != nullptr)
 	{
-		if (t->key == key)
+		if (temp->key == key)
 			break;
-		if (key > t->key)
-			t = t->right;
-		else if (key < t->key)
-			t = t->left;
+		if (key > temp->key)
+			temp = temp->right;
+		else if (key < temp->key)
+			temp = temp->left;
 	}
-	if (t == nullptr)
+	if (temp == nullptr)
 		return nullptr;
-	if (t->key == key)
-		return t;
+	if (temp->key == key)
+		return temp;
 	return nullptr;
 }
 
 template <class T1, class T2>
-void Dictionary<T1, T2>::tree_delete(node<T1, T2> * p)
+void Dictionary<T1, T2>::tree_delete(node<T1, T2> * input)
 {
-	if (p == nullptr) return;
-	tree_delete(p->left);
-	tree_delete(p->right);
-	free(p);
+	if (input == nullptr) return;
+	tree_delete(input->left);
+	tree_delete(input->right);
+	delete input;
 }
 
 template <class T1, class T2>
@@ -178,17 +177,17 @@ node<T1, T2>* Dictionary<T1, T2>::SftIterator::next()
 	}
 	current = list.at(0);
 	list.pop_front();
-	auto p = current;
+	auto temp = current;
 	current = current->right;
-	return p;
+	return temp;
 }
 
 template <class T1, class T2>
 bool Dictionary<T1, T2>::Contains(T1 key)
 {
-	node<T1, T2> *t = node_find(key);
-	if (t == nullptr) return false;
-	return t->key == key;
+	node<T1, T2>* temp = node_find(key);
+	if (temp == nullptr) return false;
+	return temp->key == key;
 }
 
 template <class T1, class T2>
@@ -229,36 +228,36 @@ LinkedList<T2> Dictionary<T1, T2>::Values()
 template <class T1, class T2>
 T2 Dictionary<T1, T2>::Find(T1 key)
 {
-	node<T1, T2> *t = node_find(key);
-	if (t == nullptr)
+	node<T1, T2>* temp = node_find(key);
+	if (temp == nullptr)
 		return {};
-	return t->value;
+	return temp->value;
 }
 
 template<class T1, class T2>
-size_t Dictionary<T1, T2>::size(node<T1, T2> * p)
+size_t Dictionary<T1, T2>::size(node<T1, T2> * input)
 {
-	if (p == nullptr) return 0;
-	return size(p->left) + size(p->right) + 1;
+	if (input == nullptr) return 0;
+	return size(input->left) + size(input->right) + 1;
 }
 
 template<class T1, class T2>
-node<T1, T2>* Dictionary<T1, T2>::successor(node<T1, T2> *p)
+node<T1, T2>* Dictionary<T1, T2>::successor(node<T1, T2> * input)
 {
-	node<T1, T2> *y;
-	if (p->left != nullptr)
+	node<T1, T2>* temp;
+	if (input->left != nullptr)
 	{
-		y = p->left;
-		while (y->right != nullptr)
-			y = y->right;
+		temp = input->left;
+		while (temp->right != nullptr)
+			temp = temp->right;
 	}
 	else
 	{
-		y = p->right;
-		while (y->left != nullptr)
-			y = y->left;
+		temp = input->right;
+		while (temp->left != nullptr)
+			temp = temp->left;
 	}
-	return y;
+	return temp;
 }
 
 template <class T1, class T2>
@@ -268,129 +267,129 @@ void Dictionary<T1, T2>::Remove(T1 key)
 	{
 		return;
 	}
-	node<T1, T2> *p = root;
-	node<T1, T2> *y;
-	node<T1, T2> *q;
+	node<T1, T2>* replaceable = root;
 	bool found = false;
-	while (p != nullptr && !found)
+	while (replaceable != nullptr && !found)
 	{
-		if (p->key == key)
+		if (replaceable->key == key)
 			found = true;
 		if (!found)
 		{
-			if (p->key < key)
-				p = p->right;
+			if (replaceable->key < key)
+				replaceable = replaceable->right;
 			else
-				p = p->left;
+				replaceable = replaceable->left;
 		}
 	}
 	if (!found)
 		return;
-	if (p->left == nullptr || p->right == nullptr)
-		y = p;
+	node<T1, T2>* removable;
+	node<T1, T2>* temp;
+	if (replaceable->left == nullptr || replaceable->right == nullptr)
+		removable = replaceable;
 	else
-		y = successor(p);
-	if (y->left != nullptr)
-		q = y->left;
+		removable = successor(replaceable);
+	if (removable->left != nullptr)
+		temp = removable->left;
 	else
 	{
-		if (y->right != nullptr)
-			q = y->right;
+		if (removable->right != nullptr)
+			temp = removable->right;
 		else
-			q = nullptr;
+			temp = nullptr;
 	}
-	if (q != nullptr)
-		q->father = y->father;
-	if (y->father == nullptr)
-		root = q;
+	if (temp != nullptr)
+		temp->father = removable->father;
+	if (removable->father == nullptr)
+		root = temp;
 	else
 	{
-		if (y == y->father->left)
-			y->father->left = q;
+		if (removable == removable->father->left)
+			removable->father->left = temp;
 		else
-			y->father->right = q;
+			removable->father->right = temp;
 	}
-	if (y != p)
+	if (removable != replaceable)
 	{
-		p->color = y->color;
-		p->key = y->key;
-		p->value = y->value;
+		replaceable->color = removable->color;
+		replaceable->key = removable->key;
+		replaceable->value = removable->value;
 	}
-	if (y->color == 0)
-		delete_fix(q);
+	if (removable->color == 0)
+		delete_fix(temp);
 }
 
 template <class T1, class T2>
-void Dictionary<T1, T2>::delete_fix(node<T1, T2> *p)
+void Dictionary<T1, T2>::delete_fix(node<T1, T2> * input)
 {
-	if (p != nullptr)
+	if (input != nullptr)
 	{
-		node<T1, T2> *s;
-		while (p != root && !p->color)
+		node<T1, T2>* temp;
+		while (input != root && !input->color)
 		{
-			if (p->father->left == p)
+			if (input->father->left == input)
 			{
-				s = p->father->right;
-				if (s->color == 1)
+				temp = input->father->right;
+				if (temp->color == 1)
 				{
-					s->color = 0;
-					p->father->color = 1;
-					rotate_left(p->father);
-					s = p->father->right;
+					temp->color = 0;
+					input->father->color = 1;
+					rotate_left(input->father);
+					temp = input->father->right;
 				}
-				if (!s->right->color && !s->left->color)
+				if (!temp->right->color && !temp->left->color)
 				{
-					s->color = 1;
-					p = p->father;
+					temp->color = 1;
+					input = input->father;
 				}
 				else
 				{
-					if (!s->right->color)
+					if (!temp->right->color)
 					{
-						s->left->color = 0;
-						s->color = 1;
-						rotate_right(s);
-						s = p->father->right;
+						temp->left->color = 0;
+						temp->color = 1;
+						rotate_right(temp);
+						temp = input->father->right;
 					}
-					s->color = p->father->color;
-					p->father->color = 0;
-					s->right->color = 0;
-					rotate_left(p->father);
-					p = root;
+					temp->color = input->father->color;
+					input->father->color = 0;
+					temp->right->color = 0;
+					rotate_left(input->father);
+					input = root;
 				}
 			}
 			else
 			{
-				s = p->father->left;
-				if (s->color)
+				temp = input->father->left;
+				if (temp->color)
 				{
-					s->color = 1;
-					p->father->color = 1;
-					rotate_right(p->father);
-					s = p->father->left;
+					temp->color = 1;
+					input->father->color = 1;
+					rotate_right(input->father);
+					temp = input->father->left;
 				}
-				if (!s->left->color && !s->right->color)
+				if (!temp->left->color && !temp->right->color)
 				{
-					s->color = 1;
-					p = p->father;
+					temp->color = 1;
+					input = input->father;
 				}
 				else
 				{
-					if (!s->left->color)
+					if (!temp->left->color)
 					{
-						s->right->color = 0;
-						s->color = 1;
-						rotate_left(s);
-						s = p->father->left;
+						temp->right->color = 0;
+						temp->color = 1;
+						rotate_left(temp);
+						temp = input->father->left;
 					}
-					s->color = p->father->color;
-					p->father->color = 0;
-					s->left->color = 0;
-					rotate_right(p->father);
-					p = root;
+					temp->color = input->father->color;
+					input->father->color = 0;
+					temp->left->color = 0;
+					rotate_right(input->father);
+					input = root;
 				}
 			}
-			p->color = 0;
+			input->color = 0;
 			root->color = 0;
 		}
 	}

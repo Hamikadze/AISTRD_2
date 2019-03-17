@@ -16,8 +16,7 @@ private:
 	node *father;
 	node *left;
 	node *right;
-	bool color;
-
+	bool color; //red = true, black = false
 	node(T1 key, T2 value)
 	{
 		this->key = key;
@@ -33,14 +32,14 @@ private:
 template <class T1, class T2> class Dictionary
 {
 	node<T1, T2> *root;
-	size_t size(node<T1, T2>*);
-	void rotate_left(node<T1, T2>*);
-	void rotate_right(node<T1, T2>*);
-	void insert_fix(node<T1, T2>*);
-	node<T1, T2>* successor(node<T1, T2>*);
-	void delete_fix(node<T1, T2>*);
-	node<T1, T2>* node_find(T1 key);
-	void tree_delete(node<T1, T2>*);
+	size_t size(node<T1, T2>*); //return size of tree
+	void rotate_left(node<T1, T2>*); //rotate to left
+	void rotate_right(node<T1, T2>*); //rotate to right
+	void insert_fix(node<T1, T2>*); //call after insert, fix tree height
+	node<T1, T2>* successor(node<T1, T2>*); //find successor for node, call in delete
+	void delete_fix(node<T1, T2>*); //call after delete, fix tree height
+	node<T1, T2>* node_find(T1 key); //find and return node, return nullprt if not find
+	void tree_delete(node<T1, T2>*); //delete node
 	class SftIterator : public Iterator<node<T1, T2> *>
 	{
 	public:
@@ -71,11 +70,11 @@ public:
 
 	Dictionary() { root = nullptr; };
 	~Dictionary() { Clear(); }
-	void Insert(T1 key, T2 value);
+	void Insert(T1 key, T2 value); //insert key and value to dictionary, or replace value by key
 	void Remove(T1);
-	T2 Find(T1);
+	T2 Find(T1); //return nullptr if not find
 	bool Contains(T1 key);
-	void Clear();
+	void Clear(); //clear whole dictionary
 	LinkedList<T1> Keys();
 	LinkedList<T2> Values();
 };

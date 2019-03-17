@@ -113,7 +113,9 @@ namespace UnitTest_2
 			dictionary.Insert("first", 0);
 			dictionary.Insert("second", 1);
 			dictionary.Insert("third", 2);
+
 			dictionary.Remove("first");
+
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
 			Assert::IsTrue(dictionary.size() == 2 &&
