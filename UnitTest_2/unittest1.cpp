@@ -14,7 +14,7 @@ namespace UnitTest_2
 		TEST_METHOD(dictionary_initialize_empty)
 		{
 			Dictionary<int, int> dictionary;
-			Assert::IsTrue(dictionary.size() == 0);
+			Assert::IsTrue(dictionary.get_size() == 0);
 		}
 
 		TEST_METHOD(dictionary_insert_all_new)
@@ -25,7 +25,7 @@ namespace UnitTest_2
 			dictionary.Insert(1, 2);
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 3 &&
+			Assert::IsTrue(dictionary.get_size() == 3 &&
 				keys.at(0) == -1 && values.at(0) == 0 &&
 				keys.at(1) == 0 && values.at(1) == 1 &&
 				keys.at(2) == 1 && values.at(2) == 2);
@@ -43,7 +43,7 @@ namespace UnitTest_2
 			dictionary.Insert(1, 2);
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 3 &&
+			Assert::IsTrue(dictionary.get_size() == 3 &&
 				keys.at(0) == -1 && values.at(0) == 0 &&
 				keys.at(1) == 0 && values.at(1) == 1 &&
 				keys.at(2) == 1 && values.at(2) == 2);
@@ -61,7 +61,7 @@ namespace UnitTest_2
 			dictionary.Insert(1, 22);
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 3 &&
+			Assert::IsTrue(dictionary.get_size() == 3 &&
 				keys.at(0) == -1 && values.at(0) == 10 &&
 				keys.at(1) == 0 && values.at(1) == 21 &&
 				keys.at(2) == 1 && values.at(2) == 22);
@@ -74,7 +74,7 @@ namespace UnitTest_2
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 3 &&
+			Assert::IsTrue(dictionary.get_size() == 3 &&
 				keys.at(0) == -1 &&
 				keys.at(1) == 0 &&
 				keys.at(2) == 1);
@@ -84,7 +84,7 @@ namespace UnitTest_2
 		{
 			Dictionary<int, int> dictionary;
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 0 && keys.isEmpty());
+			Assert::IsTrue(dictionary.get_size() == 0 && keys.isEmpty());
 		}
 
 		TEST_METHOD(dictionary_values_non_empty)
@@ -94,7 +94,7 @@ namespace UnitTest_2
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
 			auto values = dictionary.Values();
-			Assert::IsTrue(dictionary.size() == 3 &&
+			Assert::IsTrue(dictionary.get_size() == 3 &&
 				values.at(0) == 0 &&
 				values.at(1) == 1 &&
 				values.at(2) == 2);
@@ -104,7 +104,7 @@ namespace UnitTest_2
 		{
 			Dictionary<int, int> dictionary;
 			auto values = dictionary.Values();
-			Assert::IsTrue(dictionary.size() == 0 && values.isEmpty());
+			Assert::IsTrue(dictionary.get_size() == 0 && values.isEmpty());
 		}
 
 		TEST_METHOD(dictionary_remove_non_empty_exist_first)
@@ -118,7 +118,7 @@ namespace UnitTest_2
 
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 2 &&
+			Assert::IsTrue(dictionary.get_size() == 2 &&
 				keys.at(0) == "second" && values.at(0) == 1 &&
 				keys.at(1) == "third" && values.at(1) == 2);
 		}
@@ -132,7 +132,7 @@ namespace UnitTest_2
 			dictionary.Remove("second");
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 2 &&
+			Assert::IsTrue(dictionary.get_size() == 2 &&
 				keys.at(0) == "first" && values.at(0) == 0 &&
 				keys.at(1) == "third" && values.at(1) == 2);
 		}
@@ -146,7 +146,7 @@ namespace UnitTest_2
 			dictionary.Remove("third");
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 2 &&
+			Assert::IsTrue(dictionary.get_size() == 2 &&
 				keys.at(0) == "first" && values.at(0) == 0 &&
 				keys.at(1) == "second" && values.at(1) == 1);
 		}
@@ -155,7 +155,7 @@ namespace UnitTest_2
 		{
 			Dictionary<bool, int> dictionary;
 			dictionary.Remove(false);
-			Assert::IsTrue(dictionary.size() == 0);
+			Assert::IsTrue(dictionary.get_size() == 0);
 		}
 
 		TEST_METHOD(dictionary_remove_non_empty_non_exist_forth)
@@ -167,7 +167,7 @@ namespace UnitTest_2
 			dictionary.Remove("forth");
 			auto values = dictionary.Values();
 			auto keys = dictionary.Keys();
-			Assert::IsTrue(dictionary.size() == 3 &&
+			Assert::IsTrue(dictionary.get_size() == 3 &&
 				keys.at(0) == "first" && values.at(0) == 0 &&
 				keys.at(1) == "second" && values.at(1) == 1 &&
 				keys.at(2) == "third" && values.at(2) == 2);
@@ -209,6 +209,7 @@ namespace UnitTest_2
 			dictionary.Insert(-1, 0);
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
+			auto n = dictionary.Find(1) == 2;
 			Assert::IsTrue(
 				dictionary.Find(-1) == 0 &&
 				dictionary.Find(0) == 1 &&
@@ -232,14 +233,14 @@ namespace UnitTest_2
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
 			dictionary.Clear();
-			Assert::IsTrue(dictionary.size() == 0);
+			Assert::IsTrue(dictionary.get_size() == 0);
 		}
 
 		TEST_METHOD(dictionary_clear_empty)
 		{
 			Dictionary<int, int> dictionary;
 			dictionary.Clear();
-			Assert::IsTrue(dictionary.size() == 0);
+			Assert::IsTrue(dictionary.get_size() == 0);
 		}
 	};
 }
