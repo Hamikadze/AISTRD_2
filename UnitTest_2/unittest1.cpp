@@ -49,6 +49,36 @@ namespace UnitTest_2
 				keys.at(2) == 1 && values.at(2) == 2);
 		}
 
+		TEST_METHOD(dictionary_count_variable_test)
+		{
+			Dictionary<int, int> dictionary;
+			dictionary.Insert(-1, 0);
+			dictionary.Insert(0, 0);
+			dictionary.Insert(1, 0);
+			dictionary.Insert(2, 0);
+			dictionary.Insert(3, 0);
+			dictionary.Insert(4, 0);
+
+			dictionary.Insert(-1, 0);
+			dictionary.Insert(-1, 0);
+			dictionary.Insert(-1, 0);
+			dictionary.Insert(0, 0);
+			dictionary.Insert(3, 0);
+			dictionary.Insert(3, 0);
+			dictionary.Insert(4, 0);
+			dictionary.Insert(4, 0);
+			dictionary.Insert(4, 0);
+			dictionary.Insert(4, 0);
+			auto nodes = dictionary.Nodes();
+			Assert::IsTrue(dictionary.get_size() == 6 &&
+				nodes.at(0)->get_count() == 4 &&
+				nodes.at(1)->get_count() == 2 &&
+				nodes.at(2)->get_count() == 1 &&
+				nodes.at(3)->get_count() == 1 &&
+				nodes.at(4)->get_count() == 3 &&
+				nodes.at(5)->get_count() == 5);
+		}
+
 		TEST_METHOD(dictionary_insert_all_exists_another)
 		{
 			Dictionary<int, int> dictionary;
@@ -85,6 +115,26 @@ namespace UnitTest_2
 			Dictionary<int, int> dictionary;
 			auto keys = dictionary.Keys();
 			Assert::IsTrue(dictionary.get_size() == 0 && keys.isEmpty());
+		}
+
+		TEST_METHOD(dictionary_nodes_non_empty)
+		{
+			Dictionary<int, int> dictionary;
+			dictionary.Insert(-1, 0);
+			dictionary.Insert(0, 1);
+			dictionary.Insert(1, 2);
+			auto nodes = dictionary.Nodes();
+			Assert::IsTrue(dictionary.get_size() == 3 &&
+				nodes.at(0)->get_key() == -1 && nodes.at(0)->get_value() == 0 &&
+				nodes.at(1)->get_key() == 0 && nodes.at(1)->get_value() == 1 &&
+				nodes.at(2)->get_key() == 1 && nodes.at(2)->get_value() == 2);
+		}
+
+		TEST_METHOD(dictionary_nodes_empty)
+		{
+			Dictionary<int, int> dictionary;
+			auto nodes = dictionary.Nodes();
+			Assert::IsTrue(dictionary.get_size() == 0 && nodes.isEmpty());
 		}
 
 		TEST_METHOD(dictionary_values_non_empty)
@@ -209,11 +259,10 @@ namespace UnitTest_2
 			dictionary.Insert(-1, 0);
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
-			auto n = dictionary.Find(1) == 2;
 			Assert::IsTrue(
-				dictionary.Find(-1) == 0 &&
-				dictionary.Find(0) == 1 &&
-				dictionary.Find(1) == 2);
+				*dictionary.Find(-1) == 0 &&
+				*dictionary.Find(0) == 1 &&
+				*dictionary.Find(1) == 2);
 		}
 
 		TEST_METHOD(dictionary_find_non_empty_non_exist)
@@ -223,7 +272,7 @@ namespace UnitTest_2
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
 			int default = {};
-			Assert::IsTrue(dictionary.Find(2) == default);
+			Assert::IsTrue(*dictionary.Find(2) == default);
 		}
 
 		TEST_METHOD(dictionary_clear_non_empty)

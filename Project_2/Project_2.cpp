@@ -43,7 +43,8 @@ using namespace std;
 //	}
 //}
 
-int main() {
+int main()
+{
 	int data;
 	Dictionary<int, int> rbTree1;
 

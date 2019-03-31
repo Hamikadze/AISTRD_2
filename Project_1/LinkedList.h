@@ -5,11 +5,10 @@
 
 template <class  T>
 class LinkedList {
-public:
 	class Node
 	{
-	public:
-		Node(T data, Node * next = nullptr) {
+		friend LinkedList<T>;
+		Node(T data, Node* next = nullptr) {
 			this->data = data;
 			this->next = next;
 		};
@@ -24,8 +23,11 @@ public:
 	};
 	void add_first(T newElem);
 	void reset_list();
-	Node * head{};
-	Node * tail{};
+	void swap(Node*, Node*);
+	void sortPart(int fromIndex, int toIndex, bool(*comp)(const void*, const void*));
+	Node* at_node(size_t index) const;
+	Node* head{};
+	Node* tail{};
 	size_t size;
 	class ListIterator : public Iterator<T>
 	{
@@ -54,6 +56,7 @@ public:
 	void print_to_console() const; // вывод элементов списка в консоль через разделитель, не использовать at
 	void clear(); // удаление всех элементов списка
 	void set(size_t index, T newElem) const; // замена элемента по индексу на передаваемый элемент
+	void sort(bool (*comp)(const void*, const void*));
 	bool isEmpty() const; // проверка на пустоту списка
 	bool contains(LinkedList* list) const; // проверка на содержание другого списка в списке
 	bool contains(T data) const;
@@ -64,7 +67,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const LinkedList<T>& linked_list) {
 		if (linked_list.size == 0)
 			return os << "[nullptr]";
-		auto* list = linked_list.create_list_iterator();
+		auto * list = linked_list.create_list_iterator();
 		os << "[nullptr] <- ";
 		while (list->has_next()) {
 			os << "[" << list->next() << "] <- ";

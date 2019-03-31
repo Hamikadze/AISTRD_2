@@ -255,6 +255,7 @@ Node<T1, T2>* Dictionary<T1, T2>::insertBST(Node<T1, T2> * root, Node<T1, T2> * 
 	}
 	else if (root->key == node->key) {
 		root->value = node->value;
+		++root->count;
 	}
 
 	return root;
@@ -348,12 +349,12 @@ void Dictionary<T1, T2>::Remove(T1 key)
 }
 
 template <class T1, class T2>
-T2 Dictionary<T1, T2>::Find(T1 key)
+T2* Dictionary<T1, T2>::Find(T1 key)
 {
 	Node<T1, T2>* temp = node_find(root, key);
 	if (temp == nullptr)
 		return {};
-	return temp->value;
+	return &temp->value;
 }
 
 template <class T1, class T2>
@@ -369,6 +370,20 @@ void Dictionary<T1, T2>::Clear()
 {
 	tree_delete(root);
 	root = nullptr;
+}
+
+template <class T1, class T2>
+LinkedList<Node<T1, T2>*> Dictionary<T1, T2>::Nodes()
+{
+	LinkedList<Node<T1, T2>*> nodes;
+	if (this->get_size() != 0) {
+		auto* iterator = this->create_sft_iterator();
+		while (iterator->has_next())
+		{
+			nodes.push_back(iterator->next());
+		}
+	}
+	return nodes;
 }
 
 template <class T1, class T2>

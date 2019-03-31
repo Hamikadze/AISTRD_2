@@ -57,7 +57,7 @@ void LinkedList<T>::print_to_console() const
 {
 	if (size == 0)
 		return;
-	auto* list = create_list_iterator();
+	auto * list = create_list_iterator();
 	std::cout << "[nullptr] <- ";
 	while (list->has_next()) {
 		std::cout << "[" << list->next() << "] <- ";
@@ -93,7 +93,7 @@ void LinkedList<T>::set(size_t index, T newElem) const
 	}
 	else {
 		size_t counter = 0;
-		Node * current = head;
+		Node* current = head;
 		while (counter != index) {
 			current = current->next;
 			counter++;
@@ -103,13 +103,67 @@ void LinkedList<T>::set(size_t index, T newElem) const
 }
 
 template <class T>
+void LinkedList<T>::swap(Node * first, Node * second)
+{
+	auto temp = first->data;
+	first->data = second->data;
+	second->data = temp;
+}
+
+template <class T>
+typename LinkedList<T>::Node* LinkedList<T>::at_node(size_t index) const
+{
+	if (index >= size) {
+		throw std::out_of_range("Index is greater than list size");
+	}
+	else {
+		size_t counter = 0;
+		Node* current = head;
+		while (counter != index) {
+			current = current->next;
+			counter++;
+		}
+		return current;
+	}
+}
+
+template <class T>
+void LinkedList<T>::sortPart(int fromIndex, int toIndex, bool(*comp)(const void*, const void*))
+{
+	if (fromIndex < toIndex)
+	{
+		const T last = this->at(toIndex);
+		int i = fromIndex - 1;
+		for (int j = fromIndex; j < toIndex; j++)
+		{
+			if (comp(this->at(j), last))
+			{
+				i++;
+				swap(this->at_node(i), this->at_node(j));
+			}
+		}
+		swap(this->at_node(toIndex), this->at_node(i + 1));
+		const int middleIndex = i + 1;
+		sortPart(fromIndex, middleIndex - 1, comp);
+		sortPart(middleIndex + 1, toIndex, comp);
+	}
+}
+
+template <class T>
+void LinkedList<T>::sort(bool(*comp)(const void*, const void*))
+{
+	const auto toIndex = size - 1;
+	sortPart(0, toIndex, comp);
+}
+
+template <class T>
 bool LinkedList<T>::isEmpty() const
 {
 	return size == 0;
 }
 
 template <class T>
-bool LinkedList<T>::contains(LinkedList* list) const
+bool LinkedList<T>::contains(LinkedList * list) const
 {
 	if (list->size == 0) return true;
 	Node * current = head;
@@ -139,7 +193,7 @@ bool LinkedList<T>::contains(LinkedList* list) const
 template <class T>
 bool LinkedList<T>::contains(T data) const
 {
-	Node * current = head;
+	Node* current = head;
 	bool contains = false;
 	do {
 		if (current->data == data)
@@ -207,7 +261,7 @@ void LinkedList<T>::pop_back()
 		delete tail;
 	}
 	else {
-		Node * current = head;
+		Node* current = head;
 		do
 		{
 			current = current->next;
@@ -230,7 +284,7 @@ void LinkedList<T>::pop_front()
 		delete tail;
 	}
 	else {
-		Node * current = head->next;
+		Node* current = head->next;
 		delete head;
 		head = current;
 		size--;
@@ -261,7 +315,7 @@ void LinkedList<T>::insert(size_t index, T newElem)
 		}
 		size_t counter = 0;
 		Node* current = head;
-		Node * prev = nullptr;
+		Node* prev = nullptr;
 		while (counter != index) {
 			prev = current;
 			current = current->next;
@@ -282,18 +336,8 @@ void LinkedList<T>::insert(size_t index, T newElem)
 template <class T>
 T LinkedList<T>::at(size_t index) const
 {
-	if (index >= size) {
-		throw std::out_of_range("Index is greater than list size");
-	}
-	else {
-		size_t counter = 0;
-		Node * current = head;
-		while (counter != index) {
-			current = current->next;
-			counter++;
-		}
-		return current->data;
-	}
+
+	return at_node(index)->data;
 }
 
 template <class T>
@@ -318,7 +362,7 @@ void LinkedList<T>::remove(size_t index)
 			return;
 		}
 		size_t counter = 0;
-		Node * previous = head;
+		Node* previous = head;
 		while (counter != (index - 1)) {
 			previous = previous->next;
 			counter++;

@@ -5,22 +5,30 @@
 using namespace std;
 
 enum Color { RED, BLACK }; // RED - false, BLACK - true
+template <class T1, class T2> class Dictionary;
 
 template<class T1, class T2> //T1 - key type, T2 - value type
 struct Node
 {
+private:
+	friend Dictionary<T1, T2>;
 	T1 key;
 	T2 value;
+	unsigned int count;//number of inserts with value changes
 	bool color;
 	Node* left, * right, * parent;
-
 	Node(T1 key, T2 value)
 	{
 		this->key = key;
 		this->value = value;
+		this->count = 1;
 		color = RED;
 		left = right = parent = nullptr;
 	}
+public:
+	T1 get_key() { return this->key; }
+	T2 get_value() { return this->value; }
+	unsigned int get_count() { return this->count; }
 };
 
 template<class T1, class T2> //T1 - key type, T2 - value type
@@ -75,9 +83,10 @@ public:
 	};
 	void Insert(T1 key, T2 value); //insert key and value to dictionary, or replace value by key
 	void Remove(T1);
-	T2 Find(T1); //return nullptr if not find
+	T2* Find(T1); //return nullptr if not find
 	bool Contains(T1 key);
 	void Clear(); //clear whole dictionary
+	LinkedList<Node<T1, T2>*> Nodes();
 	LinkedList<T1> Keys();
 	LinkedList<T2> Values();
 };
