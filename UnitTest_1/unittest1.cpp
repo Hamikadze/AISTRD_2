@@ -103,21 +103,36 @@ namespace UnitTest_For_Project_2
 			Assert::IsTrue(list.at(3) == 4); // 1 2 3 4
 		}
 
-		static bool count_compare(const void* elem1, const void* elem2)
+		static bool int_ascending_compare(int elem1, int elem2)
 		{
-			auto a = (int)(elem1);
-			auto b = (int)elem2;
-			return (a <= b);
+			return (elem1 <= elem2);
 		}
-		TEST_METHOD(sort_is_valid)
+
+		TEST_METHOD(sort_by_ascending_is_valid)
 		{
 			LinkedList<int> list;
 			list.push_front(2);
 			list.push_front(1);
 			list.push_front(3);
 			list.push_front(4);
-			list.sort(0);
-			Assert::IsTrue(list.at(3) == 4); // 1 2 3 4
+			list.sort(int_ascending_compare);
+			Assert::IsTrue(list.at(0) == 1 && list.at(1) == 2 && list.at(2) == 3 && list.at(3) == 4); // 1 2 3 4
+		}
+
+		static bool int_descending_compare(int elem1, int elem2)
+		{
+			return (elem1 > elem2);
+		}
+
+		TEST_METHOD(sort_by_descending_is_valid)
+		{
+			LinkedList<int> list;
+			list.push_front(2);
+			list.push_front(1);
+			list.push_front(3);
+			list.push_front(4);
+			list.sort(int_descending_compare);
+			Assert::IsTrue(list.at(0) == 4 && list.at(1) == 3 && list.at(2) == 2 && list.at(3) == 1); // 1 2 3 4
 		}
 
 		TEST_METHOD(push_front_is_valid_1)

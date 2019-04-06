@@ -11,8 +11,11 @@ void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<N
 	{
 		//  If interval consist of 2 elements then it's simple
 		//
-		table.Find(nodes.at(left_index)->get_key())->append(L"0");
-		table.Find(nodes.at(right_index)->get_key())->append(L"1");
+		std::wstring* str;
+		if (table.Find(nodes.at(left_index)->get_key(), str))
+			str->append(L"0");
+		if (table.Find(nodes.at(right_index)->get_key(), str))
+			str->append(L"1");
 	}
 	else
 	{
@@ -31,13 +34,16 @@ void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<N
 		const float p_half = p_full * 0.5f;
 		for (int i = left_index; i <= right_index; ++i)
 		{
+			std::wstring* str;
 			p += nodes.at(i)->get_count() / static_cast<float>(lenght);
 			if (p <= p_half) {
-				table.Find(nodes.at(i)->get_key())->append(L"0");
+				if (table.Find(nodes.at(i)->get_key(), str))
+					str->append(L"0");
 			}
 			else
 			{
-				table.Find(nodes.at(i)->get_key())->append(L"1");
+				if (table.Find(nodes.at(i)->get_key(), str))
+					str->append(L"1");
 				if (split_index < 0) split_index = i;
 			}
 		}
@@ -56,7 +62,9 @@ std::wstring ShennonFano::encode(std::wstring & input, Dictionary<wchar_t, wstri
 	std::wstring output;
 	for (wchar_t letter : input)
 	{
-		output.append(*table.Find(letter));
+		std::wstring* str;
+		if (table.Find(letter, str))
+			output.append(*str);
 	}
 	return output;
 }
@@ -70,7 +78,7 @@ std::wstring ShennonFano::decode(std::wstring input, Dictionary<wchar_t, wstring
 		while (iterator->has_next())
 		{
 			auto code = iterator->next();
-			unsigned int code_length = code->get_value().length();
+			const unsigned int code_length = code->get_value().length();
 			if (input.compare(0, code_length, code->get_value()) == 0)
 			{
 				output += code->get_key();

@@ -24,7 +24,7 @@ class LinkedList {
 	void add_first(T newElem);
 	void reset_list();
 	void swap(Node*, Node*);
-	void sortPart(int fromIndex, int toIndex, bool(*comp)(const void*, const void*));
+	void sortPart(int fromIndex, int toIndex, bool(*comp)(T, T));
 	Node* at_node(size_t index) const;
 	Node* head{};
 	Node* tail{};
@@ -56,7 +56,7 @@ public:
 	void print_to_console() const; // вывод элементов списка в консоль через разделитель, не использовать at
 	void clear(); // удаление всех элементов списка
 	void set(size_t index, T newElem) const; // замена элемента по индексу на передаваемый элемент
-	void sort(bool (*comp)(const void*, const void*));
+	void sort(bool (*comp)(T, T));
 	bool isEmpty() const; // проверка на пустоту списка
 	bool contains(LinkedList* list) const; // проверка на содержание другого списка в списке
 	bool contains(T data) const;

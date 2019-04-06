@@ -259,10 +259,10 @@ namespace UnitTest_2
 			dictionary.Insert(-1, 0);
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
-			Assert::IsTrue(
-				*dictionary.Find(-1) == 0 &&
-				*dictionary.Find(0) == 1 &&
-				*dictionary.Find(1) == 2);
+			int* value1, * value2, * value3;
+			Assert::IsTrue(dictionary.Find(-1, value1) && *value1 == 0 &&
+				dictionary.Find(0, value2) && *value2 == 1 &&
+				dictionary.Find(1, value3) && *value3 == 2);
 		}
 
 		TEST_METHOD(dictionary_find_non_empty_non_exist)
@@ -271,8 +271,8 @@ namespace UnitTest_2
 			dictionary.Insert(-1, 0);
 			dictionary.Insert(0, 1);
 			dictionary.Insert(1, 2);
-			int default = {};
-			Assert::IsTrue(*dictionary.Find(2) == default);
+			int* value;
+			Assert::IsTrue(!dictionary.Find(2, value));
 		}
 
 		TEST_METHOD(dictionary_clear_non_empty)

@@ -8,9 +8,10 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	std::wstring test_string = L"гигабайт";
+	std::wstring test_string2 = L"~гигатайд";
 	ShennonFano shennon;
 	auto table = shennon.get_table(test_string);
-	auto encode_str = shennon.encode(test_string, table);
+	auto encode_str = shennon.encode(test_string2, table);
 	auto decode_str = shennon.decode(encode_str, table);
 	std::cout << "Hello World!\n";
 	return 0;

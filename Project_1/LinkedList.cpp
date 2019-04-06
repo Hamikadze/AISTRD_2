@@ -128,7 +128,7 @@ typename LinkedList<T>::Node* LinkedList<T>::at_node(size_t index) const
 }
 
 template <class T>
-void LinkedList<T>::sortPart(int fromIndex, int toIndex, bool(*comp)(const void*, const void*))
+void LinkedList<T>::sortPart(int fromIndex, int toIndex, bool(*comp)(T, T))
 {
 	if (fromIndex < toIndex)
 	{
@@ -150,7 +150,7 @@ void LinkedList<T>::sortPart(int fromIndex, int toIndex, bool(*comp)(const void*
 }
 
 template <class T>
-void LinkedList<T>::sort(bool(*comp)(const void*, const void*))
+void LinkedList<T>::sort(bool(*comp)(T, T))
 {
 	const auto toIndex = size - 1;
 	sortPart(0, toIndex, comp);
@@ -336,7 +336,6 @@ void LinkedList<T>::insert(size_t index, T newElem)
 template <class T>
 T LinkedList<T>::at(size_t index) const
 {
-
 	return at_node(index)->data;
 }
 

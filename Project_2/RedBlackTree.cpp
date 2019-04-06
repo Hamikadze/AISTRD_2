@@ -301,6 +301,7 @@ void Dictionary<T1, T2>::tree_delete(Node<T1, T2> * node)
 	if (node == nullptr) return;
 	tree_delete(node->left);
 	tree_delete(node->right);
+	node = nullptr;
 	delete node;
 	size--;
 }
@@ -349,12 +350,13 @@ void Dictionary<T1, T2>::Remove(T1 key)
 }
 
 template <class T1, class T2>
-T2* Dictionary<T1, T2>::Find(T1 key)
+bool Dictionary<T1, T2>::Find(T1 key, T2 * &value)
 {
 	Node<T1, T2>* temp = node_find(root, key);
 	if (temp == nullptr)
-		return {};
-	return &temp->value;
+		return false;
+	value = &temp->value;
+	return true;
 }
 
 template <class T1, class T2>
