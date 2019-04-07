@@ -11,6 +11,7 @@ int main()
 	std::wstring test_string2 = L"~гигатайд";
 	ShennonFano shennon;
 	auto table = shennon.get_table(test_string);
+	auto n = table.Nodes();
 	auto encode_str = shennon.encode(test_string2, table);
 	auto decode_str = shennon.decode(encode_str, table);
 	std::cout << "Hello World!\n";

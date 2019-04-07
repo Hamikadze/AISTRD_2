@@ -5,9 +5,9 @@
 
 class ShennonFano
 {
+private:
 	LinkedList<Node<wchar_t, std::wstring>*> nodes;
 	void ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<Node<wchar_t, std::wstring>*>& nodes, int lenght, int left_index, int right_index);
-
 	static bool count_compare(Node<wchar_t, wstring>* elem1, Node<wchar_t, wstring>* elem2)
 	{
 		// ReSharper disable once CppCStyleCast

@@ -3,6 +3,9 @@
 void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<Node<wchar_t, std::wstring>*>& nodes,
 	int lenght, int left_index, int right_index)
 {
+	if (lenght == 0) {
+		return;
+	}
 	if (left_index == right_index)
 	{
 		return;
@@ -36,7 +39,8 @@ void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<N
 		{
 			std::wstring* str;
 			p += nodes.at(i)->get_count() / static_cast<float>(lenght);
-			if (p <= p_half) {
+			if (p <= p_half || split_index < 0) {
+				/*if (split_index < 0) */split_index = i;
 				if (table.Find(nodes.at(i)->get_key(), str))
 					str->append(L"0");
 			}
@@ -44,37 +48,38 @@ void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<N
 			{
 				if (table.Find(nodes.at(i)->get_key(), str))
 					str->append(L"1");
-				if (split_index < 0) split_index = i;
 			}
 		}
 
-		if (split_index < 0) split_index = left_index + 1;
+		//if (split_index < 0) split_index = left_index + 1;
 
 		//  Next step (recursive)
 		//
-		ShannonCodes(table, nodes, lenght, left_index, split_index - 1);
-		ShannonCodes(table, nodes, lenght, split_index, right_index);
+		ShannonCodes(table, nodes, lenght, left_index, split_index/* - 1*/);
+		ShannonCodes(table, nodes, lenght, split_index + 1, right_index);
 	}
 }
 
-std::wstring ShennonFano::encode(std::wstring & input, Dictionary<wchar_t, wstring> & table)
+std::wstring ShennonFano::encode(std::wstring& input, Dictionary<wchar_t, wstring>& table)
 {
 	std::wstring output;
-	for (wchar_t letter : input)
-	{
-		std::wstring* str;
-		if (table.Find(letter, str))
-			output.append(*str);
-	}
+	if (input.length() && table.get_size())
+		for (wchar_t letter : input)
+		{
+			std::wstring* str;
+			if (table.Find(letter, str))
+				output.append(*str);
+		}
 	return output;
 }
 
-std::wstring ShennonFano::decode(std::wstring input, Dictionary<wchar_t, wstring> & table)
+std::wstring ShennonFano::decode(std::wstring input, Dictionary<wchar_t, wstring>& table)
 {
-	std::wstring output;
-	while (input.length() > 0)
+	std::wstring output = L"";
+	while (input.length() && table.get_size())
 	{
 		auto iterator = table.Nodes().create_list_iterator();
+		bool found = false;
 		while (iterator->has_next())
 		{
 			auto code = iterator->next();
@@ -83,8 +88,10 @@ std::wstring ShennonFano::decode(std::wstring input, Dictionary<wchar_t, wstring
 			{
 				output += code->get_key();
 				input = input.substr(code_length);
+				found = true;
 			};
 		}
+		if (!found) break;
 	};
 	return output;
 }
@@ -92,12 +99,14 @@ std::wstring ShennonFano::decode(std::wstring input, Dictionary<wchar_t, wstring
 Dictionary<wchar_t, wstring> ShennonFano::get_table(std::wstring input)
 {
 	static Dictionary<wchar_t, wstring> letters;
-	for (wchar_t letter : input)
-	{
-		letters.Insert(letter, L"");
+	if (input.length()) {
+		for (wchar_t letter : input)
+		{
+			letters.Insert(letter, L"");
+		}
+		LinkedList<Node<wchar_t, std::wstring>*> nodes = letters.Nodes();
+		nodes.sort(count_compare);
+		ShannonCodes(letters, nodes, input.length(), 0, letters.get_size() - 1);
 	}
-	LinkedList<Node<wchar_t, std::wstring>*> nodes = letters.Nodes();
-	nodes.sort(count_compare);
-	ShannonCodes(letters, nodes, input.length(), 0, letters.get_size() - 1);
 	return letters;
 }
