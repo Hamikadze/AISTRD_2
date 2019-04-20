@@ -1,11 +1,8 @@
 #include "ShennonFano.h"
+#include "math.h"
 
-void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<Node<wchar_t, std::wstring>*>& nodes,
-	int lenght, int left_index, int right_index)
+void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<Node<wchar_t, std::wstring>*>& nodes, int left_index, int right_index)
 {
-	if (lenght == 0) {
-		return;
-	}
 	if (left_index == right_index)
 	{
 		return;
@@ -27,18 +24,18 @@ void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<N
 		float p_full = 0;
 		for (int i = left_index; i <= right_index; ++i)
 		{
-			p_full += nodes.at(i)->get_count() / static_cast<float>(lenght);
+			p_full += nodes.at(i)->get_count();
 		}
 
 		//  Searching center
 		//
 		float p = 0;
 		int split_index = -1; // index of split pos
-		const float p_half = p_full * 0.5f;
+		const int p_half = round(p_full * 0.5f);
 		for (int i = left_index; i <= right_index; ++i)
 		{
 			std::wstring* str;
-			p += nodes.at(i)->get_count() / static_cast<float>(lenght);
+			p += nodes.at(i)->get_count();
 			if (p <= p_half || split_index < 0) {
 				/*if (split_index < 0) */split_index = i;
 				if (table.Find(nodes.at(i)->get_key(), str))
@@ -55,8 +52,8 @@ void ShennonFano::ShannonCodes(Dictionary<wchar_t, wstring>& table, LinkedList<N
 
 		//  Next step (recursive)
 		//
-		ShannonCodes(table, nodes, lenght, left_index, split_index/* - 1*/);
-		ShannonCodes(table, nodes, lenght, split_index + 1, right_index);
+		ShannonCodes(table, nodes, left_index, split_index/* - 1*/);
+		ShannonCodes(table, nodes, split_index + 1, right_index);
 	}
 }
 
@@ -106,7 +103,7 @@ Dictionary<wchar_t, wstring> ShennonFano::get_table(std::wstring input)
 		}
 		LinkedList<Node<wchar_t, std::wstring>*> nodes = letters.Nodes();
 		nodes.sort(count_compare);
-		ShannonCodes(letters, nodes, input.length(), 0, letters.get_size() - 1);
+		ShannonCodes(letters, nodes, 0, letters.get_size() - 1);
 	}
 	return letters;
 }

@@ -7,8 +7,8 @@
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-	std::wstring test_string = L"гигабайт";
-	std::wstring test_string2 = L"~гигатайд";
+	std::wstring test_string = L"1234";
+	std::wstring test_string2 = L"1234";
 	ShennonFano shennon;
 	auto table = shennon.get_table(test_string);
 	auto n = table.Nodes();
