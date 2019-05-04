@@ -84,6 +84,8 @@ public:
 	void Insert(T1 key, T2 value); //insert key and value to dictionary, or replace value by key
 	void Remove(T1);
 	bool Find(T1, T2 * &); //return nullptr if not find
+	T2 Find(T1); //return nullptr if not find
+	T2 FindOrInsert(T1, T2);
 	bool Contains(T1 key);
 	void Clear(); //clear whole dictionary
 	LinkedList<Node<T1, T2>*> Nodes();

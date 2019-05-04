@@ -360,6 +360,27 @@ bool Dictionary<T1, T2>::Find(T1 key, T2 * &value)
 }
 
 template <class T1, class T2>
+T2 Dictionary<T1, T2>::Find(T1 key)
+{
+	Node<T1, T2>* temp = node_find(root, key);
+	if (temp == nullptr)
+		return {};
+	return temp->value;
+}
+
+template <class T1, class T2>
+T2 Dictionary<T1, T2>::FindOrInsert(T1 key, T2 default_value)
+{
+	Node<T1, T2>* temp = node_find(root, key);
+	if (temp == nullptr)
+	{
+		this->Insert(key, default_value);
+		return default_value;
+	}
+	return temp->value;
+}
+
+template <class T1, class T2>
 bool Dictionary<T1, T2>::Contains(T1 key)
 {
 	Node<T1, T2>* temp = node_find(root, key);
