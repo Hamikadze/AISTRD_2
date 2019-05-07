@@ -15,21 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Project_4.cpp">
+    <ClCompile Include="Course_work.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dijkstra.cpp">
+    <ClCompile Include="FordFulkerson.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dijkstra.h">
+    <ClInclude Include="FordFulkerson.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
