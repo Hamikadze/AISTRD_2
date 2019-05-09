@@ -76,17 +76,17 @@ bool FordFulkerson<T>::read()
 }
 
 template <class T>
-bool FordFulkerson<T>::bfs(int s, int t, Dictionary<int, int>& parent)
+bool FordFulkerson<T>::bfs(int from, int to, Dictionary<int, int>& parent)
 {
 	LinkedList<int> visited;
-	LinkedList<T> q;
-	q.push_back(s);
-	visited.push_front(s);
-	parent.Insert(s, -1);
-	while (!q.isEmpty())
+	LinkedList<T> queue;
+	queue.push_back(from);
+	visited.push_front(from);
+	parent.Insert(from, -1);
+	while (!queue.isEmpty())
 	{
-		T u = q.at(0);
-		q.pop_front();
+		T u = queue.at(0);
+		queue.pop_front();
 		LinkedList<EdgeNode<T>*>** f_value;
 		if (edges.Find(u, f_value)) {
 			auto iterator = (*f_value)->create_list_iterator();
@@ -95,7 +95,7 @@ bool FordFulkerson<T>::bfs(int s, int t, Dictionary<int, int>& parent)
 				auto v = iterator->next()->key;
 				if (!visited.contains(v) && edge_exist(u, v))
 				{
-					q.push_back(v);
+					queue.push_back(v);
 					parent.Insert(v, u);
 					visited.push_front(v);
 				}
@@ -103,30 +103,30 @@ bool FordFulkerson<T>::bfs(int s, int t, Dictionary<int, int>& parent)
 		}
 	}
 
-	return visited.contains(t);
+	return visited.contains(to);
 }
 template <class T>
-int FordFulkerson<T>::fordFulkerson(int s, int t)
+int FordFulkerson<T>::fordFulkerson(int from, int to)
 {
 	Dictionary<int, int> parent;
 
 	int max_flow = 0;
 
-	while (bfs(s, t, parent))
+	while (bfs(from, to, parent))
 	{
 		int path_flow = INT_MAX;
 		LinkedList<int>vec;
-		for (int v = t; v != s; v = parent.Find(v))
+		for (int i = to; i != from; i = parent.Find(i))
 		{
-			int u = parent.Find(v);
-			path_flow = min(path_flow, get_edge(u, v));
-			vec.push_back(v);
-			flow_change(u, v, -1 * path_flow);
-			flow_change(v, u, path_flow);
+			int u = parent.Find(i);
+			path_flow = min(path_flow, get_edge(u, i));
+			vec.push_back(i);
+			flow_change(u, i, -1 * path_flow);
+			flow_change(i, u, path_flow);
 		}
-		vec.push_back(s);
-		for (int k = vec.get_size() - 1; k >= 0; k--)
-			cout << vec.at(k) << "->";
+		vec.push_back(from);
+		for (int i = vec.get_size() - 1; i >= 0; i--)
+			cout << vec.at(i) << "->";
 		cout << " : " << path_flow << endl;
 		max_flow += path_flow;
 	}

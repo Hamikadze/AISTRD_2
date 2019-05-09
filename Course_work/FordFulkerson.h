@@ -11,7 +11,7 @@ private:
 	bool edge_exist(T, T);
 	int get_edge(T, T);
 	void flow_change(T, T, int);
-	bool bfs(int s, int t, Dictionary<int, int>& parent);
+	bool bfs(int from, int to, Dictionary<int, int>& parent);
 
 	bool is_u_int(const std::string s) const
 	{
@@ -21,5 +21,5 @@ private:
 public:
 	FordFulkerson() : Graph<T>() {};
 	bool read();
-	int fordFulkerson(int s, int t);
+	int fordFulkerson(int from, int to);
 };

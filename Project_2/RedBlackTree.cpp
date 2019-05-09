@@ -51,9 +51,15 @@ void Dictionary<T1, T2>::fixInsertRBTree(Node<T1, T2> * &node)
 {
 	Node<T1, T2>* parent = nullptr;
 	Node<T1, T2>* grandparent = nullptr;
+
+	//Check the current node is not the root of the tree and has color conflicts.
 	while (node != root && getColor(node) == RED && getColor(node->parent) == RED) {
 		parent = node->parent;
 		grandparent = parent->parent;
+		/*If both the parent and uncle are red, then both of them can be repainted black
+		*and the grandfather will turn red on the right side.
+		*
+		 */
 		if (parent == grandparent->left) {
 			Node<T1, T2>* uncle = grandparent->right;
 			if (getColor(uncle) == RED) {
@@ -63,6 +69,10 @@ void Dictionary<T1, T2>::fixInsertRBTree(Node<T1, T2> * &node)
 				node = grandparent;
 			}
 			else {
+				/*The parent is red, but the uncle is black. Also, the current node is the right descendant,
+				*and in turn the left descendant of its ancestor.
+				*In this case, a tree can be rotated, which changes the roles of the current node and its ancestor.
+				*/
 				if (node == parent->right) {
 					rotateLeft(parent);
 					node = parent;
@@ -75,6 +85,9 @@ void Dictionary<T1, T2>::fixInsertRBTree(Node<T1, T2> * &node)
 		}
 		else {
 			Node<T1, T2>* uncle = grandparent->left;
+			/*If both the parent and uncle are red, then both of them
+			*can be repainted black and the grandfather will turn red.(left side)
+			*/
 			if (getColor(uncle) == RED) {
 				setColor(uncle, BLACK);
 				setColor(parent, BLACK);
@@ -82,6 +95,11 @@ void Dictionary<T1, T2>::fixInsertRBTree(Node<T1, T2> * &node)
 				node = grandparent;
 			}
 			else {
+				/*The parent is red, but the uncle is black, the current node is the left descendant and the
+				*left descendant. In this case, the tree is rotated by.
+				*The result is a tree in which the former parent is now the parent of both the current node
+				*and the former grandfather.
+				*/
 				if (node == parent->left) {
 					rotateRight(parent);
 					node = parent;
@@ -107,48 +125,54 @@ void Dictionary<T1, T2>::fixDeleteRBTree(Node<T1, T2> * &node)
 		size--;
 		return;
 	}
-
+	/*Simple case - remove node with puts it's left/right (with exsist) child instead*/
 	if (getColor(node) == RED || getColor(node->left) == RED || getColor(node->right) == RED) {
 		Node<T1, T2>* child = node->left != nullptr ? node->left : node->right;
 
 		if (node == node->parent->left) {
 			node->parent->left = child;
-			if (child != nullptr)
-				child->parent = node->parent;
-			setColor(child, BLACK);
-			delete (node);
-			size--;
 		}
 		else {
 			node->parent->right = child;
-			if (child != nullptr)
-				child->parent = node->parent;
-			setColor(child, BLACK);
-			delete (node);
-			size--;
 		}
+		if (child != nullptr)
+			child->parent = node->parent;
+		setColor(child, BLACK);
+		delete (node);
+		size--;
 	}
 	else {
 		Node<T1, T2>* sibling = nullptr;
 		Node<T1, T2>* parent = nullptr;
 		Node<T1, T2>* temp = node;
-		//setColor(node, DOUBLE_BLACK);
-		while (temp != root && /*getColor(node) == DOUBLE_BLACK*/ temp->right == nullptr && temp->left == nullptr) { // check if not root and while leaf (both == nullprt)
+		while (temp != root && temp->right == nullptr && temp->left == nullptr) { // check if not root and while leaf (both == nullprt)
 			parent = temp->parent;
 			if (temp == parent->left) {
 				sibling = parent->right;
+				/*Sibling is red then rotate left around node father
+				 * Switch colors between node father and grandfather
+				 * Continue to the next case with sub-tree rotated
+				 */
 				if (getColor(sibling) == RED) {
 					setColor(sibling, BLACK);
 					setColor(parent, RED);
 					rotateLeft(parent);
 				}
 				else {
+					/*Sibling and its children are black
+					 * Take parent and sibling and move it up (leaving node with one black and sibling - red)
+					 * The problem is moving up - continue solving it.
+					 */
 					if (getColor(sibling->left) == BLACK && getColor(sibling->right) == BLACK) {
 						setColor(sibling, RED);
 						if (getColor(parent) == RED)
 							setColor(parent, BLACK);
 						temp = parent;
 					}
+					/*Sibling is black, with left child red and right child black
+					 * Rotate right around node sibling
+					 * Switch colors between node new and old siblings
+					 */
 					else {
 						if (getColor(sibling->right) == BLACK) {
 							setColor(sibling->left, BLACK);
@@ -156,6 +180,12 @@ void Dictionary<T1, T2>::fixDeleteRBTree(Node<T1, T2> * &node)
 							rotateRight(sibling);
 							sibling = parent->right;
 						}
+						/*Sibling is black with right child red
+						 * Rotate left around node father
+						 * Color node new grandfather with father color
+						 * Color father with node extra black, making a singly-colored
+						 * Color node uncle black (originally node right "nephew")
+						 */
 						setColor(sibling, parent->color);
 						setColor(parent, BLACK);
 						setColor(sibling->right, BLACK);
@@ -164,7 +194,10 @@ void Dictionary<T1, T2>::fixDeleteRBTree(Node<T1, T2> * &node)
 					}
 				}
 			}
-			else {
+			else {/*Sibling is red then rotate right around node father
+				 * Switch colors between node father and grandfather
+				 * Continue to the next case with sub-tree rotated
+				 */
 				sibling = parent->left;
 				if (getColor(sibling) == RED) {
 					setColor(sibling, BLACK);
@@ -172,12 +205,21 @@ void Dictionary<T1, T2>::fixDeleteRBTree(Node<T1, T2> * &node)
 					rotateRight(parent);
 				}
 				else {
+					/*Sibling and its children are black
+					 * Take parent and sibling and move it up (leaving node with one black and sibling - red)
+					 * The problem is moving up - continue solving it.
+					 */
 					if (getColor(sibling->left) == BLACK && getColor(sibling->right) == BLACK) {
 						setColor(sibling, RED);
 						if (getColor(parent) == RED)
 							setColor(parent, BLACK);
 						temp = parent;
 					}
+
+					/*Sibling is black, with right child red and left child black
+					 * Rotate right around node sibling
+					 * Switch colors between node new and old siblings
+					 */
 					else {
 						if (getColor(sibling->left) == BLACK) {
 							setColor(sibling->right, BLACK);
@@ -185,6 +227,12 @@ void Dictionary<T1, T2>::fixDeleteRBTree(Node<T1, T2> * &node)
 							rotateLeft(sibling);
 							sibling = parent->left;
 						}
+						/*Sibling is black with left child red
+						 * Rotate right around node father
+						 * Color node new grandfather with father color
+						 * Color father with node extra black, making a singly-colored
+						 * Color node uncle black (originally node right "nephew")
+						 */
 						setColor(sibling, parent->color);
 						setColor(parent, BLACK);
 						setColor(sibling->left, BLACK);
@@ -277,7 +325,11 @@ Node<T1, T2>* Dictionary<T1, T2>::deleteBST(Node<T1, T2> * root, T1 key)
 	if (root->left == nullptr || root->right == nullptr)
 		return root;
 
+	/*Remove node and put int's successor instead
+	 * Make node left child the successor's left child
+	 */
 	Node<T1, T2> * temp = minValueNode(root->right);
+
 	root->key = temp->key;
 	root->value = temp->value;
 	return deleteBST(root->right, temp->key);
