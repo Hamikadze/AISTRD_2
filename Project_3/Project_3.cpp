@@ -6,25 +6,25 @@
 
 int main()
 {
-	setlocale(LC_ALL, "Russian");
-	std::wstring test_string = L"1234";
-	std::wstring test_string2 = L"1234";
+	system("chcp 1251");//Установка кодовой страницы
+	setlocale(LC_ALL, "ru_RU.UTF-8");
+	//wcout.imbue(locale("rus_rus.866"));
+	std::wstring test_string = L"Ленин — жил. Ленин — жив. Ленин — будет жить.";
 	ShennonFano shennon;
 	auto table = shennon.get_table(test_string);
-	auto n = table.Nodes();
-	auto encode_str = shennon.encode(test_string2, table);
+	auto encode_str = shennon.encode(test_string, table);
 	auto decode_str = shennon.decode(encode_str, table);
-	std::cout << "Hello World!\n";
+	auto table_iterator = table.Nodes().create_list_iterator();
+	while (table_iterator->has_next())
+	{
+		auto table_node = table_iterator->next();
+
+		std::wcout << "Letter : " << table_node->get_key() << " | Code : " << table_node->get_value() << " | Freq: " << table_node->get_count() << std::endl;
+	}
+	size_t decode_size = (decode_str.size() + 1) * sizeof(wchar_t);
+	size_t encode_size = ceil(encode_str.size() / 8.0);
+	std::wcout << "Decode string : " << decode_str << " | size : " << decode_size << std::endl;
+	std::wcout << "Encode string : " << encode_str << " | size : " << encode_size << std::endl;
+	std::cout << "Compression ratio : " << encode_size / (double)decode_size << std::endl;
 	return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started:
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

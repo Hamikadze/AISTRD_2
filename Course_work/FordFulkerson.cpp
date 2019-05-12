@@ -55,16 +55,16 @@ bool FordFulkerson<T>::read()
 	while (std::getline(file, str))
 	{
 		try {
-			int city_from, city_to, price_to;
+			int from, to, weight;
 			std::istringstream iss(str);
-			iss >> city_from >> city_to >> price_to;
+			iss >> from >> to >> weight;
 			/*if (city_from.empty() || city_to.empty() || price_to.empty())
 			{
 				throw std::invalid_argument("Input data reading error");
 			}
 			if (is_u_int(price_to))
 			{*/
-			this->insert_edge(city_from, city_to, price_to);
+			this->insert_edge(from, to, weight);
 			//}
 		}
 		catch (std::invalid_argument & e)
@@ -130,6 +130,5 @@ int FordFulkerson<T>::fordFulkerson(int from, int to)
 		cout << " : " << path_flow << endl;
 		max_flow += path_flow;
 	}
-	//rGraph->print();
 	return max_flow;
 }
