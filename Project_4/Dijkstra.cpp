@@ -43,42 +43,31 @@ void Dijkstra<T>::dijkstra_shortest_path(T start)
 		}
 	}
 }
-template <class T>
-void Dijkstra<T>::print_distances(T start) {
-	auto nodes = distance.Nodes();
-	auto iterator = nodes.create_list_iterator();
-	while (iterator->has_next())
-	{
-		auto node = iterator->next();
-		cout << "Shortest distance from " << start << " to " << node->get_key() << " is: " << node->get_value() << " Expand : ";
-		auto short_path = shortest_path(node->get_key());
-		auto short_path_iterator = short_path.create_list_iterator();
-		while (short_path_iterator->has_next())
-		{
-			cout << short_path_iterator->next() << " ";
-		}
-		cout << endl;
-	}
-}
 
 template <class T>
-void Dijkstra<T>::shortest_path(T to, LinkedList<T> & path)
+void Dijkstra<T>::get_path(T to, LinkedList<T> & path)
 {
 	T* f_result;
 	if (parent.Find(to, f_result)) {
 		path.push_front(*f_result);
-		shortest_path(*f_result, path);
+		get_path(*f_result, path);
 	}
 }
 
 template <class T>
-LinkedList<T> Dijkstra<T>::shortest_path(T destination)
+LinkedList<T> Dijkstra<T>::get_path(T destination)
 {
 	LinkedList<T> path;
-	this->shortest_path(destination, path);
+	this->get_path(destination, path);
 	if (!path.isEmpty())
 		path.push_back(destination);
 	return path;
+}
+
+template <class T>
+int Dijkstra<T>::shortest_path(T to)
+{
+	return distance.Find(to);
 }
 
 template <class T>

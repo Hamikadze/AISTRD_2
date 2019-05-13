@@ -8,9 +8,6 @@ class FordFulkerson : public Graph<T>
 private:
 	using Graph<T>::edges;
 	~FordFulkerson();
-	bool edge_exist(T, T);
-	int get_edge(T, T);
-	void flow_change(T, T, int);
 	bool bfs(int from, int to, Dictionary<int, int>& parent);
 
 	bool is_u_int(const std::string s) const

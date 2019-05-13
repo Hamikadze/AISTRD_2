@@ -3,51 +3,6 @@
 #include "FordFulkerson.h"
 
 template <class T>
-bool FordFulkerson<T>::edge_exist(T node1, T node2)
-{
-	return get_edge(node1, node2);
-}
-
-template <class T>
-int FordFulkerson<T>::get_edge(T node1, T node2)
-{
-	LinkedList<EdgeNode<T>*>** f_value;
-	int weight = 0;
-	if (edges.Find(node1, f_value))
-	{
-		auto iterator = (*f_value)->create_list_iterator();
-		while (iterator->has_next())
-		{
-			auto value = iterator->next();
-			if (value->key == node2)
-			{
-				weight = value->weight;
-				break;
-			}
-		}
-	}
-	return weight;
-}
-
-template <class T>
-void FordFulkerson<T>::flow_change(T node1, T node2, int flow_change)
-{
-	LinkedList<EdgeNode<T>*>** f_value;
-	if (edges.Find(node1, f_value))
-	{
-		auto iterator = (*f_value)->create_list_iterator();
-		while (iterator->has_next())
-		{
-			auto value = iterator->next();
-			if (value->key == node2)
-			{
-				value->weight = value->weight + flow_change;
-			}
-		}
-	}
-}
-
-template <class T>
 bool FordFulkerson<T>::read()
 {
 	std::ifstream file("Read.txt");

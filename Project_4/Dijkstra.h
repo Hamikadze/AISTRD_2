@@ -13,13 +13,13 @@ private:
 	{
 		return s.find_first_not_of("0123456789") == std::string::npos;
 	}
-	void shortest_path(T, LinkedList<T>&);
+	void get_path(T, LinkedList<T>&);
 
 	~Dijkstra() { parent.Clear(); distance.Clear(); edges.Clear(); }
 public:
 	Dijkstra() : Graph<T>() {};
 	void dijkstra_shortest_path(T);
-	void print_distances(T);
-	LinkedList<T> shortest_path(T);
+	LinkedList<T> get_path(T);
+	int shortest_path(T);
 	bool read();
 };

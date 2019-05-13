@@ -25,6 +25,9 @@ protected:
 		edges.Clear();
 	};
 	Dictionary<T, LinkedList<EdgeNode<T>*>*> edges;
+	bool edge_exist(T, T);
+	int get_edge(T, T);
+	void flow_change(T, T, int);
 public:
 	Graph() = default;
 	void insert_edge(T, T, int);
