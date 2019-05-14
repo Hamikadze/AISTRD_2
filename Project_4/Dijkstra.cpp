@@ -16,15 +16,10 @@ void Dijkstra<T>::dijkstra_shortest_path(T start)
 			while (iteartor->has_next()) {
 				EdgeNode<T>* curr = iteartor->next();
 				T v_neighbor = curr->key;
-				int weight = curr->weight;
-				int max_value1 = std::numeric_limits<int>::max();
-				int max_value2 = std::numeric_limits<int>::max();
-				int* f_result_curr = &max_value1;
-				int* f_result_naib = &max_value2;
-				distance.Find(v_curr, f_result_curr);
-				distance.Find(v_neighbor, f_result_naib);
-				if (*f_result_curr + weight < *f_result_naib) {
-					distance.Insert(v_neighbor, distance.Find(v_curr) + weight);
+				const int weight = curr->weight;
+				const int current_flow = distance.Find(v_curr, INT_MAX);
+				if (current_flow + weight < distance.Find(v_neighbor, INT_MAX)) {
+					distance.Insert(v_neighbor, current_flow + weight);
 					parent.Insert(v_neighbor, v_curr);
 				}
 			}

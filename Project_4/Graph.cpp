@@ -11,13 +11,13 @@ void Graph<T>::insert_edge(T from, T to, int weight) {
 }
 
 template <class T>
-bool Graph<T>::edge_exist(T, T)
+bool Graph<T>::edge_exist(T node1, T node2)
 {
 	return get_edge(node1, node2);
 }
 
 template <class T>
-int Graph<T>::get_edge(T, T)
+int Graph<T>::get_edge(T node1, T node2)
 {
 	LinkedList<EdgeNode<T>*>** f_value;
 	int weight = 0;
@@ -38,7 +38,7 @@ int Graph<T>::get_edge(T, T)
 }
 
 template <class T>
-void Graph<T>::flow_change(T, T, int)
+void Graph<T>::flow_change(T node1, T node2, int flow_change)
 {
 	LinkedList<EdgeNode<T>*>** f_value;
 	if (edges.Find(node1, f_value))

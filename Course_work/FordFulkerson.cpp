@@ -48,7 +48,7 @@ bool FordFulkerson<T>::bfs(int from, int to, Dictionary<int, int>& parent)
 			while (iterator->has_next())
 			{
 				auto v = iterator->next()->key;
-				if (!visited.contains(v) && edge_exist(u, v))
+				if (!visited.contains(v) && this->edge_exist(u, v))
 				{
 					queue.push_back(v);
 					parent.Insert(v, u);
@@ -74,10 +74,10 @@ int FordFulkerson<T>::fordFulkerson(int from, int to)
 		for (int i = to; i != from; i = parent.Find(i))
 		{
 			int u = parent.Find(i);
-			path_flow = min(path_flow, get_edge(u, i));
+			path_flow = min(path_flow, this->get_edge(u, i));
 			vec.push_back(i);
-			flow_change(u, i, -1 * path_flow);
-			flow_change(i, u, path_flow);
+			this->flow_change(u, i, -1 * path_flow);
+			this->flow_change(i, u, path_flow);
 		}
 		vec.push_back(from);
 		for (int i = vec.get_size() - 1; i >= 0; i--)
